@@ -1,0 +1,29 @@
+{
+  "name": "go-type",
+  "version": "0.1.0",
+  "description": "Turn Go diagrams into SVG",
+  "author": "Forrest Jacobs <forrestjacobs@gmail.com>",
+  "script": {
+    "prepublish": "slake build"
+  },
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/forrestjacobs/go-type.git"
+  },
+  "bugs": {
+    "url": "https://github.com/forrestjacobs/go-type/issues"
+  },
+  "devDependencies": {
+    "browserify": "5.11.x",
+    "liveify": "0.4.x",
+    "uglify-js": "2.4.x",
+    "watchify": "1.0.x"
+  },
+  "dependencies": {
+    "d3": "3.4.x",
+    "split": "0.3.x",
+    "stream-combiner": "0.2.x",
+    "through": "2.3.x"
+  }
+}

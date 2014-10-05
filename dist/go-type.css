@@ -1,0 +1,57 @@
+.go-board {
+  background: #fdf6e3;
+  padding: 0.5em;
+  border: 2px solid #cfc8b8;
+}
+
+.go-board .grid {
+  stroke: #cfc8b8;
+  stroke-width: 1;
+  stroke-linecap: square;
+}
+
+.go-board .star {
+  stroke: #cfc8b8;
+  stroke-width: 6;
+}
+
+.go-board .stone {
+  stroke-width: 1;
+}
+
+.go-board .white-stone-group .stone {
+  stroke: black;
+}
+
+.go-board .white-stone-group .stone,
+.go-board .black-stone-group .label {
+  fill: white;
+}
+
+.go-board .black-stone-group .stone,
+.go-board .white-stone-group .label {
+  fill: black;
+}
+
+.go-board .symbol {
+  fill: none;
+  stroke: #b58900;
+  stroke-width: 2;
+}
+
+.go-board .direction {
+  stroke: #b58900;
+}
+
+.go-board .arrow {
+  fill: #b58900;
+}
+
+.go-board .link-group a .symbol {
+  stroke: #268bd2;
+}
+
+.go-board .link-group a .label {
+  fill: #268bd2;
+  text-decoration: underline;
+}

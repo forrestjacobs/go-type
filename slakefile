@@ -1,0 +1,70 @@
+require! <[ browserify liveify uglify-js watchify ]>
+require! <[ child_process path through ]>
+
+const source = \./src
+const destination = \./lib
+
+const browser-source = \./src/go-type.ls
+const browser-destination = \./dist/go-type.js
+
+const d3-regex = /d3\/d3\.js$/
+const require-regex = /require\(['"]\.\/([^']+)['"]\)/g
+
+# Creates a stream that accumuluates all the data first
+acc-stream = (cb) ->
+  data = []
+  through ((d) -> data.push d), !->
+    cb.call this, data.join ''
+
+# Adds appropriate configuration to browserify
+prepare = (b) ->
+  b.transform liveify
+  # Add '.ls' to required local files so browserify can locate them
+  b.transform (file) ->
+    acc-stream (data) !->
+      replaced-data = data.replace require-regex, (, n) -> "require('./#{n}.ls')"
+      @.queue replaced-data .queue null
+  # Get d3 externally
+  b.transform global: yes, (file) ->
+    if d3-regex.test file
+      through (!->), !-> @.queue 'module.exports = window.d3;' .queue null
+    else through!
+  b.add browser-source
+  b
+
+build = (flags) ->
+  child_process.exec "rm -rf #{destination} && lsc -#{flags} #{path.normalize destination} #{path.normalize source}", (err, stdout, stderr) ->
+    console.log stdout.trim! if stdout
+    console.error stderr.trim! if stderr
+    console.error "Exec error #{err}" if err?
+
+task \build 'Builds for Node' ->
+  build \bco
+
+task \build:watch 'Builds for Node when changes are detected' ->
+  console.log \Watching...
+  build \bcow
+
+task \build:browser 'Builds for the browser' ->
+  prepare browserify! .bundle!
+    .on \error, console.error
+    .pipe acc-stream (data) !->
+      uglified = uglify-js.minify data, from-string: yes, compress: {+unsafe}
+      @.queue uglified.code .queue null
+    .pipe fs.create-write-stream browser-destination
+
+task \build:browser:watch 'Builds for the browser when changes are detected' ->
+  w = prepare watchify browserify cache: {}, package-cache: {}, full-paths: yes
+  bundle = !->
+    console.log \Building...
+    write-stream = fs.create-write-stream browser-destination
+    w.bundle!
+      .on \error, (err) !->
+        console.error String err
+        t = through!
+        t.pipe write-stream
+        t.queue "document.body.innerHTML='';document.body.appendChild(document.createTextNode(#{JSON.stringify String err}));" .queue null
+      .pipe write-stream
+  w.on \update, bundle
+  console.log \Watching...
+  bundle!
