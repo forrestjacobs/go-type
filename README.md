@@ -17,6 +17,7 @@ Go-type turns Go diagrams in [Sensei's Library Format][slf] into [SVG][svg]. In 
 ...into this:
 
 > <img src="example.png" width="308" height="308">
+> 
 > A joseki variation
 
 ## Usage
@@ -66,6 +67,11 @@ Go-type turns Go diagrams in [Sensei's Library Format][slf] into [SVG][svg]. In 
       .pipe(fs.createWriteStream('./out.html'));
     ```
 
+3.  Include go-type CSS in the resulting HTML ([download][releases]):
+    ```html
+    <link rel="stylesheet" href="go-type.css">
+    ```
+    
 [slf]: http://senseis.xmp.net/?HowDiagramsWork "How diagrams work at Sensei's Library"
 [svg]: http://en.wikipedia.org/wiki/Scalable_Vector_Graphics
 [d3]: http://d3js.org
