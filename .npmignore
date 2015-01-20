@@ -1,0 +1,9 @@
+# Distribution generated from Slakefile
+dist/go-type.js
+
+# Livescript files
+src
+
+slakefile
+
+.gitignore
